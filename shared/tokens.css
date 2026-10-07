@@ -1,0 +1,41 @@
+/* Account Flow — shared foundation for every microinteraction in the pack */
+:root{
+  --text:#F4F4F4;
+  --text-80:rgba(244,244,244,.8);
+  --text-50:rgba(244,244,244,.5);
+  --ink:#212830;
+  --btn:#121212;
+  --field:rgba(33,40,48,.5);
+  --err:#FF9B8F;
+  --radius:16px;
+  /* motion — one curve for everything (Figma smart animate, ease-out) */
+  --ease:cubic-bezier(.25,1,.5,1);
+  --move:.5s;   /* position / size */
+  --fade:.35s;  /* opacity / blur */
+}
+@media (prefers-reduced-motion:reduce){ :root{ --move:.2s; --fade:.15s } }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Onest',system-ui,sans-serif;color:var(--text);letter-spacing:-.02em;
+  background:linear-gradient(180deg,#0A0D16 0%,#151C2C 18%,#2C3853 38%,#5A6888 58%,#97A6BE 80%,#DCE4ED 100%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;
+}
+.card{width:350px;max-width:100%;display:flex;flex-direction:column;align-items:center}
+
+/* links under the form */
+.links{margin-top:24px;font-size:18px;letter-spacing:-.36px}
+.links a{color:var(--ink);font-weight:600;text-decoration:none;cursor:pointer}
+
+/* iPhone haptics: invisible native switch under the finger (see haptics.js) */
+.haptic-switch{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;z-index:5;cursor:pointer;
+  clip-path:inset(0 round var(--radius));-webkit-tap-highlight-color:transparent}
+
+/* pack navigation */
+.pack-nav{position:fixed;left:16px;top:16px;display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:0;
+  color:var(--text-80);text-decoration:none;padding:8px 12px 8px 10px;border-radius:12px;background:rgba(33,40,48,.35);
+  transition:background var(--fade) var(--ease), color var(--fade) var(--ease);z-index:20}
+.pack-nav:hover{background:rgba(33,40,48,.6);color:var(--text)}
+.pack-nav svg{width:16px;height:16px}
+.pack-nav b{font-weight:500;color:var(--text)}

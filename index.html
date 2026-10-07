@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account Flow — microinteractions pack</title>
+<meta name="description" content="Seven microinteractions across the life of an account: sign up, verify, recover, set up a profile, manage devices.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css">
+<style>
+  /* fixed gradient that also works on iOS (which ignores background-attachment:fixed) */
+  body{display:block;padding:0;background:#0A0D16}
+  body::before{content:'';position:fixed;inset:0;z-index:-1;
+    background:linear-gradient(180deg,#0A0D16 0%,#151C2C 18%,#2C3853 38%,#5A6888 58%,#97A6BE 80%,#DCE4ED 100%)}
+  .wrap{max-width:1040px;margin:0 auto;padding:96px 24px 120px}
+
+  header{max-width:560px;margin-bottom:56px}
+  .eyebrow{font-size:14px;color:var(--text-80);letter-spacing:0}
+  h1{margin-top:10px;font-size:56px;line-height:1;font-weight:500;letter-spacing:-.04em}
+  .lede{margin-top:18px;font-size:18px;line-height:26px;color:var(--text-80);letter-spacing:-.36px}
+
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  @media (max-width:760px){ .grid{grid-template-columns:1fr} h1{font-size:44px} .wrap{padding-top:72px} }
+
+  .item{position:relative;display:flex;flex-direction:column;border-radius:24px;background:rgba(12,16,25,.86);
+    color:inherit;text-decoration:none;overflow:hidden;
+    transition:transform var(--move) var(--ease), background var(--fade) var(--ease)}
+  a.item:hover{transform:translateY(-4px);background:rgba(12,16,25,.94)}
+  a.item:active{transform:scale(.99)}
+
+  .preview{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0A0D16}
+  .preview iframe{position:absolute;left:0;top:0;width:1024px;height:640px;border:0;transform-origin:0 0;pointer-events:none}
+  .preview .soon{position:absolute;inset:0;display:grid;place-items:center;
+    background:linear-gradient(180deg,#0A0D16 0%,#1C2438 55%,#3B4865 100%)}
+  .preview .num{font-size:120px;font-weight:200;letter-spacing:-.06em;color:rgba(244,244,244,.12)}
+
+  .meta{display:flex;flex-direction:column;gap:6px;padding:20px 22px 22px}
+  .row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .name{font-size:20px;font-weight:500;letter-spacing:-.4px}
+  .name span{color:var(--text-50);font-weight:400;margin-right:8px}
+  .status{font-size:13px;letter-spacing:0;color:var(--text-50);white-space:nowrap}
+  .status.live{color:var(--text)}
+  .status.live::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#7EE2A8;margin-right:7px;vertical-align:1px}
+  .step{font-size:14px;color:var(--text-50);letter-spacing:0}
+  .desc{font-size:15px;line-height:21px;color:var(--text-80);letter-spacing:-.2px}
+
+  footer{margin-top:56px;font-size:14px;color:var(--ink);letter-spacing:0}
+  footer b{font-weight:600}
+  footer{position:relative}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Microinteractions pack</p>
+    <h1>Account Flow</h1>
+    <p class="lede">Seven microinteractions across the life of an account. Each one shows its state through type and motion instead of extra UI.</p>
+  </header>
+
+  <main class="grid" id="grid"></main>
+
+  <footer>Design &amp; code — <b>Marat Murzagaliev</b></footer>
+</div>
+
+<script>
+const ITEMS = [
+  { n:'01', slug:'01-password-weight', name:'Password Weight', step:'Sign up',
+    desc:'Password strength is the font weight. Weak is Medium, strong is ExtraBold.', live:true },
+  { n:'02', slug:'02-otp', name:'OTP', step:'Verify email',
+    desc:'Code digits roll like drums. A wrong code rolls back, a right one fuses into a single plate.' },
+  { n:'03', slug:'03-resend', name:'Resend', step:'Code didn’t arrive',
+    desc:'No timer. The “Resend code” label writes itself in letter by letter as the wait runs out.' },
+  { n:'04', slug:'04-copy-key', name:'Copy Key', step:'Recovery key',
+    desc:'The copied text lifts off and flies into the button icon, so you see where it went.', live:true },
+  { n:'05', slug:'05-upload', name:'Upload', step:'Profile photo',
+    desc:'No progress bar. The file name fills in left to right as it uploads.' },
+  { n:'06', slug:'06-limit', name:'Limit', step:'About you',
+    desc:'Near the character limit the text tightens its tracking, and overflow fades out.' },
+  { n:'07', slug:'07-strike', name:'Strike', step:'Signed-in devices',
+    desc:'Swipe draws a strike-through under your finger and the row folds away. Undo pulls it back.' },
+];
+
+const grid = document.getElementById('grid');
+ITEMS.forEach(it => {
+  const el = document.createElement(it.live ? 'a' : 'div');
+  el.className = 'item';
+  if (it.live) el.href = it.slug + '/';
+  el.innerHTML = `
+    <div class="preview">${it.live
+      ? `<iframe src="${it.slug}/" title="${it.name} preview" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>`
+      : `<div class="soon"><span class="num">${it.n}</span></div>`}</div>
+    <div class="meta">
+      <div class="row"><p class="name"><span>${it.n}</span>${it.name}</p>
+        <p class="status ${it.live ? 'live' : ''}">${it.live ? 'Live' : 'Soon'}</p></div>
+      <p class="step">${it.step}</p>
+      <p class="desc">${it.desc}</p>
+    </div>`;
+  grid.appendChild(el);
+});
+
+// scale the 1024×640 live previews to the card width
+const ro = new ResizeObserver(entries => entries.forEach(e => {
+  const f = e.target.querySelector('iframe');
+  if (f) f.style.transform = `scale(${e.contentRect.width / 1024})`;
+}));
+document.querySelectorAll('.preview').forEach(p => ro.observe(p));
+</script>
+</body>
+</html>
