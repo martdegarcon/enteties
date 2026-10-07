@@ -61,3 +61,4 @@ Go to **Settings → Pages → Deploy from a branch**, then pick `main` and `/ (
 ## Credits
 
 Design and code by Marat Murzagaliev. MIT License.
+# enteties
